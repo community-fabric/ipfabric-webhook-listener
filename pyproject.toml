@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "ipfabric-webhook-listener"
+version = "0.0.1"
+description = "A webhook listener for IP Fabric to add custom integrations with external sources."
+authors = ["Justin Jeffery <justin.jeffery@ipfabric.io>"]
+license = "MIT"
+packages = [
+    { include = "src" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+fastapi-manage = "^0.8.0"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
