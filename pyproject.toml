@@ -11,6 +11,7 @@ packages = [
 [tool.poetry.dependencies]
 python = "^3.7"
 fastapi-manage = "^0.8.0"
+python-dotenv = "^0.19.2"
 
 [tool.poetry.dev-dependencies]
 
