@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field
 
 
 class Snapshot(BaseModel):
-    id: str
+    snapshot_id: str = Field(alias='id')
     name: Optional[str]
     clone_id: Optional[str] = Field(alias='cloneId')
     file: Optional[str]
