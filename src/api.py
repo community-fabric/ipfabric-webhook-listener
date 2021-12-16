@@ -22,7 +22,7 @@ async def root():
 
 
 @app.post('/ipfabric')
-async def webhook(data: Event, request: Request, bg_tasks: BackgroundTasks, x_ipf_signature: str = Header(None)):
+async def webhook(event: Event, request: Request, bg_tasks: BackgroundTasks, x_ipf_signature: str = Header(None)):
     input_hmac = hmac.new(
         key=settings.ipf_secret.encode(),
         msg=await request.body(),
@@ -30,8 +30,9 @@ async def webhook(data: Event, request: Request, bg_tasks: BackgroundTasks, x_ip
     )
     if not hmac.compare_digest(input_hmac.hexdigest(), x_ipf_signature):
         raise HTTPException(status_code=400, detail="X-IPF-Signature does not match.")
-    print(data.__dict__)
-    bg_tasks.add_task(sleep, 10)
+    if not event.test or (settings.ipf_test and event.test):
+        print(event.__dict__)
+        bg_tasks.add_task(sleep, 10)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
