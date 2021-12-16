@@ -4,10 +4,9 @@ import uvicorn
 from fastapi import FastAPI, Header, HTTPException, Request, status, BackgroundTasks
 from fastapi.responses import RedirectResponse, Response
 
+from automation import process_event
 from config import settings
 from models import Event
-from time import sleep
-from automation import process_event
 
 app = FastAPI()
 
