@@ -2,3 +2,4 @@ fastapi-manage~=0.8.0
 python-dotenv~=0.19.2
 uvicorn==0.16.0
 tableauhyperapi~=0.0.13980
+ipfabric~=0.3.1
