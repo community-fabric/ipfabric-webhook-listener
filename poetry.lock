@@ -702,6 +702,17 @@ typing-extensions = {version = "*", markers = "python_version < \"3.8\""}
 full = ["itsdangerous", "jinja2", "python-multipart", "pyyaml", "requests", "graphene"]
 
 [[package]]
+name = "tableauhyperapi"
+version = "0.0.13980"
+description = "Hyper API for Python"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+cffi = ">=1.12.2,<1.14.3 || >1.14.3,<2"
+
+[[package]]
 name = "typer"
 version = "0.4.0"
 description = "Typer, build great CLIs. Easy to code. Based on Python type hints."
@@ -798,7 +809,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "4027edb08a66b022985069f7425c91694bdd6fd1b948c8b948f7fb58e72ac85a"
+content-hash = "76327e2b17f82b8883f41cfdba05545bc0f6392a2748988d8f75ccb1157c6152"
 
 [metadata.files]
 alembic = [
@@ -1242,6 +1253,11 @@ sqlalchemy = [
 starlette = [
     {file = "starlette-0.16.0-py3-none-any.whl", hash = "sha256:38eb24bf705a2c317e15868e384c1b8a12ca396e5a3c3a003db7e667c43f939f"},
     {file = "starlette-0.16.0.tar.gz", hash = "sha256:e1904b5d0007aee24bdd3c43994be9b3b729f4f58e740200de1d623f8c3a8870"},
+]
+tableauhyperapi = [
+    {file = "tableauhyperapi-0.0.13980-py3-none-macosx_10_11_x86_64.whl", hash = "sha256:7f15276edfa6708074b4697a6aa576c88f11d27a3c4b154319ea9f1ab620d1e6"},
+    {file = "tableauhyperapi-0.0.13980-py3-none-manylinux2014_x86_64.whl", hash = "sha256:f9216d4590e9c450477d4048cbc1f7f7171afd0ff8d4a233ddba311ef4fd6ee6"},
+    {file = "tableauhyperapi-0.0.13980-py3-none-win_amd64.whl", hash = "sha256:03dfdcdb5cb5f02c56012137a5303b4b31da4ce16898edae6397b5fd6d1dc6f3"},
 ]
 typer = [
     {file = "typer-0.4.0-py3-none-any.whl", hash = "sha256:d81169725140423d072df464cad1ff25ee154ef381aaf5b8225352ea187ca338"},
