@@ -31,20 +31,20 @@ def snapshot(event: Event):
             url = urljoin(settings.ipf_url, 'api/v1/jobs/' + job.group(1) + '/download')
             return Link('Download Snapshot', url)
         elif event.action == 'load':
-            url = urljoin(settings.ipf_url, SNAP_URL + event.snapshot.id)
+            url = urljoin(settings.ipf_url, SNAP_URL + event.snapshot.snapshot_id)
             return Link('Snapshot Loaded', url)
         elif event.action == 'unload':
-            url = urljoin(settings.ipf_url, SNAP_URL + event.snapshot.id)
+            url = urljoin(settings.ipf_url, SNAP_URL + event.snapshot.snapshot_id)
             return Link('Snapshot Unloaded', url)
         elif event.action == 'delete':
             url = urljoin(settings.ipf_url, SNAP_URL)
             return Link('Snapshot Deleted', url)
         elif event.action == 'discover':
-            url = urljoin(settings.ipf_url, SNAP_URL + event.snapshot.id)
+            url = urljoin(settings.ipf_url, SNAP_URL + event.snapshot.snapshot_id)
             return Link('Discovery Completed', url)
     else:
-        if event.snapshot and event.snapshot.id:
-            url = urljoin(settings.ipf_url, SNAP_URL + event.snapshot.id)
+        if event.snapshot and event.snapshot.snapshot_id:
+            url = urljoin(settings.ipf_url, SNAP_URL + event.snapshot.snapshot_id)
         else:
             url = urljoin(settings.ipf_url, SNAP_URL)
         return Link('Snapshot Management', url)
