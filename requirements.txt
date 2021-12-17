@@ -1,3 +1,0 @@
-fastapi-manage~=0.8.0
-python-dotenv~=0.19.2
-uvicorn==0.16.0
