@@ -5,7 +5,44 @@ This will allow for easier development and not require installing all packages f
 you do not plan to use.  We will develop an integration video on how to merge different branches into 
 a usable product per your environment.
 
+## Development
+This project will use Python Poetry exclusively so package handling is easily managed and
+dependencies across branches do not conflict.  See [Python Setup](#python-setup)
+
+- Fork this repository to your workspace and create a new branch for your integration.
+- To add new packages for your integration run:
+  - `poetry add package-name --optional`
+  - In `pyproject.toml` look for `[tool.poetry.extras]`
+  - Add a new line with your integration and the required packages, for instance:
+    - `tableau = ["tableauhyperapi", "pandas", "pantab"]`
+    - If your package is specified in another extra it is acceptable to include it in yours without adding it.
+  - To install and use the packages:
+    - `poetry install -E tableau`
+- Once your integration is working commit the branch to your github repository
+- Switch to the main branch and add your `pyproject.toml` changes and commit them
+- Open a PR to the community-fabric main branch and specify your integration and branch name.
+- Once approved and merged we will create a new branch for you.
+- Once the new branch is created open a new PR for your new integration into our branch.
+
 ## Setup
+
+### <a id="python-setup"></a> Python Setup
+```shell
+python3 -m pip install -U pip poetry
+poetry install
+```
+One time suggested config changes:
+```shell
+poetry config experimental.new-installer false
+poetry config virtualenvs.in-project true
+```
+
+To install optional requirements use the -E option:
+```shell
+poetry install -E tableau
+```
+
+If you have any poetry install issues go to `AppData\Local\pypoetry` and delete the `Cache` directory and try again.
 
 ### IP Fabric Setup
 
@@ -31,15 +68,6 @@ a usable product per your environment.
 ### Python
 
 ```shell
-python3 -m venv venv && source venv/bin/activate
-pip3 install -r requirements.txt
-python3 main.py
-```
-
-If Using poetry
-```shell
-python3 -m pip install -U pip poetry
-poetry install
 poetry run api
 ```
 
