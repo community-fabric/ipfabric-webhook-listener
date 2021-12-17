@@ -5,7 +5,7 @@ description = "A webhook listener for IP Fabric to add custom integrations with 
 authors = ["Justin Jeffery <justin.jeffery@ipfabric.io>"]
 license = "MIT"
 packages = [
-    { include = "src" },
+    { include = "ipf_webhook_listener" },
 ]
 
 [tool.poetry.dependencies]
@@ -19,3 +19,6 @@ uvicorn = "^0.16.0"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+api = "ipf_webhook_listener.api:main"
