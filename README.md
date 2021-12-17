@@ -19,17 +19,12 @@ Make sure to schedule a cleanup to remove old files.
 ### <a id="python-setup"></a> Python Setup
 ```shell
 python3 -m pip install -U pip poetry
-poetry install
+poetry install -E tableau
 ```
 One time suggested config changes:
 ```shell
 poetry config experimental.new-installer false
 poetry config virtualenvs.in-project true
-```
-
-To install optional requirements use the -E option:
-```shell
-poetry install -E tableau
 ```
 
 If you have any poetry install issues go to `AppData\Local\pypoetry` and delete the `Cache` directory and try again.
