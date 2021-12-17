@@ -55,7 +55,7 @@ python3 main.py
 If Using poetry
 ```shell
 python3 -m pip install -U pip poetry
-poetry install
+poetry install -E tableau
 poetry run api
 ```
 
