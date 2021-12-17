@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     ipf_test: bool = False
 
     class Config:
-        env_file = '../.env'
+        env_file = '.env'
         env_file_encoding = 'utf-8'
 
 

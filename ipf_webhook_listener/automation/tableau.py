@@ -3,8 +3,8 @@ from ipfabric import IPFClient
 from pandas import json_normalize
 from tableauhyperapi import TableName
 
-from config import settings
-from models import Event
+from ..config import settings
+from ..models import Event
 
 IPF = IPFClient(base_url=settings.ipf_url, token=settings.ipf_token, verify=settings.ipf_verify)
 
