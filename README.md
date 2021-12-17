@@ -14,6 +14,11 @@ Make sure to schedule a cleanup to remove old files.
 - [Single table publisher example](https://github.com/tableau/hyper-api-samples/tree/main/Community-Supported/publish-hyper)
 - [Multi-Table publisher example](https://github.com/tableau/hyper-api-samples/tree/main/Community-Supported/publish-multi-table-hyper)
 
+Integrations will be developed under different branches based on the main branch. 
+This will allow for easier development and not require installing all packages for integrations 
+you do not plan to use.  We will develop an integration video on how to merge different branches into 
+a usable product per your environment.
+
 ## Setup
 
 ### IP Fabric Setup
