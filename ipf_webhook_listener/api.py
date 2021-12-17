@@ -4,8 +4,8 @@ import uvicorn
 from fastapi import FastAPI, Header, HTTPException, Request, status, BackgroundTasks
 from fastapi.responses import RedirectResponse, Response
 
-from ipf_webhook_listener.config import settings
-from ipf_webhook_listener.models import Event
+from .config import settings
+from .models import Event
 from time import sleep
 
 app = FastAPI()
@@ -38,7 +38,3 @@ async def webhook(event: Event, request: Request, bg_tasks: BackgroundTasks, x_i
 
 def main():
     uvicorn.run(app, host="0.0.0.0", port=8000)
-
-
-if __name__ == "__main__":
-    main()
