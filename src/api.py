@@ -4,7 +4,7 @@ import uvicorn
 from fastapi import FastAPI, Header, HTTPException, Request, status, BackgroundTasks
 from fastapi.responses import RedirectResponse, Response
 
-from automation import process_event
+from automation.tableau import process_event
 from config import settings
 from models import Event
 
