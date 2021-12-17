@@ -130,7 +130,7 @@ dmypy.json
 
 # Intellij
 .idea/
+*.iml
 
-# Examples
-examples/*.svg
-examples/*.png
+# Poetry.lock becuase this will cause issues merging branches.
+poetry.lock
