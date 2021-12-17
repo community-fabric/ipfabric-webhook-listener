@@ -6,7 +6,8 @@ from fastapi.responses import RedirectResponse, Response
 
 from .config import settings
 from .models import Event
-from time import sleep
+from .automation.teams import send_teams
+from .automation.slack import send_slack
 
 app = FastAPI()
 
@@ -31,8 +32,10 @@ async def webhook(event: Event, request: Request, bg_tasks: BackgroundTasks, x_i
     if not hmac.compare_digest(input_hmac.hexdigest(), x_ipf_signature):
         raise HTTPException(status_code=400, detail="X-IPF-Signature does not match.")
     if not event.test or (settings.ipf_test and event.test):
-        print(event.__dict__)
-        bg_tasks.add_task(sleep, 10)
+        if settings.teams_url:
+            bg_tasks.add_task(send_teams, event)
+        if settings.slack_url:
+            bg_tasks.add_task(send_slack, event)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 

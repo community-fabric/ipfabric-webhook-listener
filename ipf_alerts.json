@@ -1,0 +1,60 @@
+{
+  "snapshot": {
+    "discover": {
+      "started": true,
+      "completed": true,
+      "failed": true,
+      "resumed": false,
+      "stopping": false,
+      "stopped": true
+    },
+    "clone": {
+      "started": false,
+      "completed": true,
+      "failed": true,
+      "resumed": false,
+      "stopping": false,
+      "stopped": true
+    },
+    "delete": {
+      "started": false,
+      "completed": true,
+      "failed": true,
+      "resumed": false,
+      "stopping": false,
+      "stopped": true
+    },
+    "download": {
+      "started": false,
+      "completed": true,
+      "failed": true,
+      "resumed": false,
+      "stopping": false,
+      "stopped": true
+    },
+    "load": {
+      "started": false,
+      "completed": true,
+      "failed": true,
+      "resumed": false,
+      "stopping": false,
+      "stopped": true
+    },
+    "unload": {
+      "started": false,
+      "completed": true,
+      "failed": true,
+      "resumed": false,
+      "stopping": true,
+      "stopped": true
+    }
+  },
+  "intent": {
+    "started": false,
+    "completed": true,
+    "failed": true,
+    "resumed": false,
+    "stopping": false,
+    "stopped": true
+  }
+}
