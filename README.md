@@ -1,5 +1,10 @@
 # IP Fabric Webhook Integration for X
 
+Integrations will be developed under different branches based on the main branch. 
+This will allow for easier development and not require installing all packages for integrations 
+you do not plan to use.  We will develop an integration video on how to merge different branches into 
+a usable product per your environment.
+
 ## Setup
 
 ### IP Fabric Setup
