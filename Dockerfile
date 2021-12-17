@@ -14,7 +14,7 @@ RUN python3 -m pip install pip \
 COPY pyproject.toml pyproject.toml
 COPY ipf_webhook_listener ipf_webhook_listener
 RUN chown -R ipf .
-RUN poetry install --no-dev
+RUN poetry install --no-dev -E notify
 
 USER ipf
 
