@@ -30,7 +30,7 @@ def add_facts(section: pymsteams.cardsection, event: Event):
     section.addFact("Requester", user)
     section.addFact("Time", event.timestamp.strftime("%c"))
     if event.snapshot:
-        section.addFact("Snapshot ID", event.snapshot.id)
+        section.addFact("Snapshot ID", event.snapshot.snapshot_id)
         if event.snapshot.clone_id:
             section.addFact("Cloned ID", event.snapshot.clone_id)
         if event.snapshot.name:
@@ -71,7 +71,7 @@ def send_teams(event: Event):
     if event.type == 'snapshot' and event.status == 'completed' and event.action in ['discover', 'load'] and \
             not event.test:
         try:
-            message.addSection(add_snapshot_facts(event.snapshot.id))
+            message.addSection(add_snapshot_facts(event.snapshot.snapshot_id))
         except:
             section = pymsteams.cardsection()
             section.text('Error collecting data from IP Fabric, check token and connectivity.')

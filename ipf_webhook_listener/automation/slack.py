@@ -65,7 +65,7 @@ def add_facts(event: Event):
     text += f"- Time: {event.timestamp.strftime('%c')}\n"
 
     if event.snapshot:
-        text += f"- Snapshot ID: {event.snapshot.id}\n"
+        text += f"- Snapshot ID: {event.snapshot.snapshot_id}\n"
         if event.snapshot.clone_id:
             text += f"- Cloned ID: {event.snapshot.clone_id}\n"
         if event.snapshot.name:
@@ -127,7 +127,7 @@ def send_slack(event: Event):
     if event.type == 'snapshot' and event.status == 'completed' and event.action in ['discover', 'load'] and \
             not event.test:
         try:
-            blocks.append(add_snapshot_facts(event.snapshot.id))
+            blocks.append(add_snapshot_facts(event.snapshot.snapshot_id))
         except:
             blocks.append({
                 "type": "section",
