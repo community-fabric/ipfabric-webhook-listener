@@ -14,12 +14,25 @@ Make sure to schedule a cleanup to remove old files.
 - [Single table publisher example](https://github.com/tableau/hyper-api-samples/tree/main/Community-Supported/publish-hyper)
 - [Multi-Table publisher example](https://github.com/tableau/hyper-api-samples/tree/main/Community-Supported/publish-multi-table-hyper)
 
-Integrations will be developed under different branches based on the main branch. 
-This will allow for easier development and not require installing all packages for integrations 
-you do not plan to use.  We will develop an integration video on how to merge different branches into 
-a usable product per your environment.
-
 ## Setup
+
+### <a id="python-setup"></a> Python Setup
+```shell
+python3 -m pip install -U pip poetry
+poetry install
+```
+One time suggested config changes:
+```shell
+poetry config experimental.new-installer false
+poetry config virtualenvs.in-project true
+```
+
+To install optional requirements use the -E option:
+```shell
+poetry install -E tableau
+```
+
+If you have any poetry install issues go to `AppData\Local\pypoetry` and delete the `Cache` directory and try again.
 
 ### IP Fabric Setup
 
@@ -47,15 +60,6 @@ a usable product per your environment.
 ### Python
 
 ```shell
-python3 -m venv venv && source venv/bin/activate
-pip3 install -r requirements.txt
-python3 main.py
-```
-
-If Using poetry
-```shell
-python3 -m pip install -U pip poetry
-poetry install -E tableau
 poetry run api
 ```
 
