@@ -4,8 +4,8 @@ import uvicorn
 from fastapi import FastAPI, Header, HTTPException, Request, status, BackgroundTasks
 from fastapi.responses import RedirectResponse, Response
 
-from config import settings
-from models import Event
+from .config import settings
+from .models import Event
 from time import sleep
 
 app = FastAPI()
@@ -36,5 +36,5 @@ async def webhook(event: Event, request: Request, bg_tasks: BackgroundTasks, x_i
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-if __name__ == "__main__":
+def main():
     uvicorn.run(app, host="0.0.0.0", port=8000)
