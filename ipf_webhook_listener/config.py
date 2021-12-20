@@ -1,5 +1,5 @@
 from pydantic import BaseSettings, BaseModel, Field
-from api.models import Event
+from .models import Event
 from typing import Optional
 
 
