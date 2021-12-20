@@ -7,6 +7,8 @@ class Settings(BaseSettings):
     ipf_token: str
     ipf_verify: bool = True
     ipf_test: bool = False
+    teams_url: str
+    slack_url: str
 
     class Config:
         env_file = '.env'
