@@ -18,6 +18,7 @@ dependencies across branches do not conflict.  See [Python Setup](#python-setup)
     - If your package is specified in another extra it is acceptable to include it in yours without adding it.
   - To install and use the packages:
     - `poetry install -E tableau`
+- Copy README.md to README-integration-name.md and edit with appropriate documentation for your branch.
 - Once your integration is working commit the branch to your github repository
 - Switch to the main branch and add your `pyproject.toml` changes and commit them
 - Open a PR to the community-fabric main branch and specify your integration and branch name.
