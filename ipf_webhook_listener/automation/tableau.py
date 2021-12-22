@@ -10,8 +10,9 @@ IPF = IPFClient(base_url=settings.ipf_url, token=settings.ipf_token, verify=sett
 
 
 def process_event(event: Event):
-    if event.type != 'snapshot' or event.action != 'discover' or event.status != 'completed':
-        return
+    if event.type != 'snapshot' or event.action != 'discover' or \
+            event.status != 'completed' or 'cron' not in event.requester:
+        return  # Only process scheduled discovery snapshots.
     IPF.update()
 
     # Set IPF.snapshot_id = '$last' during running webhook tests or this will fail.
