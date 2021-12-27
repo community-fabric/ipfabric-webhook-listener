@@ -21,6 +21,7 @@ dependencies across branches do not conflict.  See [Python Setup](#python-setup)
 - Copy README.md to README-integration-name.md and edit with appropriate documentation for your branch.
 - Once your integration is working commit the branch to your github repository
 - Switch to the main branch and add your `pyproject.toml` changes and commit them
+  - `git checkout your-branch -- pyproject.toml`
 - Open a PR to the community-fabric main branch and specify your integration and branch name.
 - Once approved and merged we will create a new branch for you.
 - Once the new branch is created open a new PR for your new integration into our branch.
