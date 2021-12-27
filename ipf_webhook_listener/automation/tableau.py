@@ -6,6 +6,7 @@ import tableauserverclient as TSC
 from ipfabric import IPFClient
 from pandas import json_normalize
 from tableau_tools.tableau_documents import TableauFileManager
+from tableau_tools.logger import Logger
 from tableauhyperapi import TableName
 
 from ..config import settings
@@ -15,12 +16,13 @@ logger = logging.getLogger()
 IPF = IPFClient(base_url=settings.ipf_url, token=settings.ipf_token, verify=settings.ipf_verify)
 TDSX_NAME = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'IPFabric-Extract.tdsx')
 HYPER_NAME = 'IPFabric.hyper'
+TABLEAU_LOG = 'hyperd.log'
 
 
 def swap_hyper(hyper_name):
     """Uses tableau_tools to open a local .tdsx file and replace the hyperfile."""
     # Uses tableau_tools to replace the hyper file in the TDSX.
-    local_tds = TableauFileManager.open(filename=TDSX_NAME)
+    local_tds = TableauFileManager.open(filename=TDSX_NAME, logger_obj=Logger(TABLEAU_LOG))
     filenames = local_tds.get_filenames_in_package()
     for filename in filenames:
         if filename.find('.hyper') != -1:
@@ -67,11 +69,11 @@ def publish_to_server():
 def process_event(event: Event):
     if event.type != 'snapshot' or event.action != 'discover' or \
             event.status != 'completed' or 'cron' not in event.requester:
-        pass  # Only process scheduled discovery snapshots.
+        return  # Only process scheduled discovery snapshots.
     IPF.update()
 
     # Set IPF.snapshot_id = '$last' during running webhook tests or this will fail.
-    # IPF.snapshot_id = event.snapshot.snapshot_id
+    IPF.snapshot_id = event.snapshot.snapshot_id
 
     sites = IPF.inventory.sites.all()
     for site in sites:
@@ -89,3 +91,4 @@ def process_event(event: Event):
     swap_hyper(HYPER_NAME)
     os.remove(HYPER_NAME)
     publish_to_server()
+    os.remove(TABLEAU_LOG)
