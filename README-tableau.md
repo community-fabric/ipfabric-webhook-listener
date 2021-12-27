@@ -14,6 +14,16 @@ Make sure to schedule a cleanup to remove old files.
 - [Single table publisher example](https://github.com/tableau/hyper-api-samples/tree/main/Community-Supported/publish-hyper)
 - [Multi-Table publisher example](https://github.com/tableau/hyper-api-samples/tree/main/Community-Supported/publish-multi-table-hyper)
 
+## Notes
+### Working with Epoch Timestamps
+To convert epoch timestamp (i.e. End of Life dates or other data):
+- Right click the field name > Create > Calculated Field
+- Example Calculation: `DATEADD('second', INT([End Support]/1000), #1970-01-01#)`
+
+For times like Uptime, these can be converted to dd:hh:mm:ss
+- https://kb.tableau.com/articles/howto/converting-seconds-to-hh-mm-ss-or-dd-hh-mm-ss
+
+
 ## Setup
 
 ### <a id="python-setup"></a> Python Setup
