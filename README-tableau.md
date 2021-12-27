@@ -14,21 +14,6 @@ Make sure to schedule a cleanup to remove old files.
 - [Single table publisher example](https://github.com/tableau/hyper-api-samples/tree/main/Community-Supported/publish-hyper)
 - [Multi-Table publisher example](https://github.com/tableau/hyper-api-samples/tree/main/Community-Supported/publish-multi-table-hyper)
 
-## Notes
-### Working with Epoch Timestamps
-To convert epoch timestamp (i.e. End of Life dates or other data):
-- Right click the field name > Create > Calculated Field
-- Example Calculation: `DATEADD('second', INT([End Support]/1000), #1970-01-01#)`
-
-For times like Uptime, these can be converted to dd:hh:mm:ss
-- https://kb.tableau.com/articles/howto/converting-seconds-to-hh-mm-ss-or-dd-hh-mm-ss
-
-### TDSX FILE
-**IMPORTANT READ AND FOLLOW THESE INSTRUCTIONS**
-- Copy `IPFabric-Extract.tdsx` to `ipf_webhook_listener/automation/IPFabric-Extract.tdsx`
-- This file is in the .gitignore
-- Pushing changes of this file to a git repository will expose your environment's data
-
 ## Setup
 
 ### <a id="python-setup"></a> Python Setup
@@ -43,6 +28,12 @@ poetry config virtualenvs.in-project true
 ```
 
 If you have any poetry install issues go to `AppData\Local\pypoetry` and delete the `Cache` directory and try again.
+
+### TDSX FILE
+**IMPORTANT READ AND FOLLOW THESE INSTRUCTIONS**
+- Copy `IPFabric-Extract.tdsx` to `ipf_webhook_listener/automation/IPFabric-Extract.tdsx`
+- This file is in the `.gitignore`
+- **Pushing changes of the `automation/IPFabric-Extract.tdsx` to a git repository will expose your environment's data**
 
 ### IP Fabric Setup
 
@@ -63,10 +54,10 @@ If you have any poetry install issues go to `AppData\Local\pypoetry` and delete 
         - If you want to translate User ID to Username token must have User Management Scope
     - `IPF_TEST` will not send test alerts to the channel when set to `False`
       - Test webhook requests will fail because it uses a random snapshot ID so automation will fail.
-      - In automation.py you can set `IPF.snapshot_id = '$last'` while running tests.
+      - If test is set to true, automation will use $last snapshot ID.
     - Tableau Information
-      - `TABLEAU_SERVER` Server URl i.e. 'https://prod-useast-b.online.tableau.com'
-      - `TABLEAU_SITE` Site Name
+      - `TABLEAU_SERVER` Server URL i.e. 'https://prod-useast-b.online.tableau.com'
+      - `TABLEAU_SITE` Site Name (tableau.com/#/site/ipfabricdemo/) would be ipfabricdemo
       - `TABLEAU_PROJECT` Project Name, defaults to Default
       - `TABLEAU_TOKEN_NAME` Token name
       - `TABLEAU_TOKEN` Token
@@ -85,3 +76,12 @@ Docker may not work as this requires writing a file to storage.
 ```shell
 docker-compose up
 ```
+
+## Notes
+### Working with Epoch Timestamps
+To convert epoch timestamp (i.e. End of Life dates or other data):
+- Right click the field name > Create > Calculated Field
+- Example Calculation: `DATEADD('second', INT([End Support]/1000), #1970-01-01#)`
+
+For times like Uptime, these can be converted to dd:hh:mm:ss
+- https://kb.tableau.com/articles/howto/converting-seconds-to-hh-mm-ss-or-dd-hh-mm-ss

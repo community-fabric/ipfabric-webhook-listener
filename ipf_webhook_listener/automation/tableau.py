@@ -72,8 +72,8 @@ def process_event(event: Event):
         return  # Only process scheduled discovery snapshots.
     IPF.update()
 
-    # Set IPF.snapshot_id = '$last' during running webhook tests or this will fail.
-    IPF.snapshot_id = event.snapshot.snapshot_id
+    # This will set IPF.snapshot_id = '$last' during running webhook tests, or it will fail.
+    IPF.snapshot_id = event.snapshot.snapshot_id if not event.test else '$last'
 
     sites = IPF.inventory.sites.all()
     for site in sites:
