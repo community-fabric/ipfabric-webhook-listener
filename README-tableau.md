@@ -23,6 +23,11 @@ To convert epoch timestamp (i.e. End of Life dates or other data):
 For times like Uptime, these can be converted to dd:hh:mm:ss
 - https://kb.tableau.com/articles/howto/converting-seconds-to-hh-mm-ss-or-dd-hh-mm-ss
 
+### TDSX FILE
+**IMPORTANT READ AND FOLLOW THESE INSTRUCTIONS**
+- Copy `IPFabric-Extract.tdsx` to `ipf_webhook_listener/automation/IPFabric-Extract.tdsx`
+- This file is in the .gitignore
+- Pushing changes of this file to a git repository will expose your environment's data
 
 ## Setup
 
@@ -59,6 +64,12 @@ If you have any poetry install issues go to `AppData\Local\pypoetry` and delete 
     - `IPF_TEST` will not send test alerts to the channel when set to `False`
       - Test webhook requests will fail because it uses a random snapshot ID so automation will fail.
       - In automation.py you can set `IPF.snapshot_id = '$last'` while running tests.
+    - Tableau Information
+      - `TABLEAU_SERVER` Server URl i.e. 'https://prod-useast-b.online.tableau.com'
+      - `TABLEAU_SITE` Site Name
+      - `TABLEAU_PROJECT` Project Name, defaults to Default
+      - `TABLEAU_TOKEN_NAME` Token name
+      - `TABLEAU_TOKEN` Token
 
 ## Running
 
