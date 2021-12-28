@@ -14,15 +14,17 @@ from ..models import Event
 
 logger = logging.getLogger()
 IPF = IPFClient(base_url=settings.ipf_url, token=settings.ipf_token, verify=settings.ipf_verify)
-TDSX_NAME = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'IPFabric-Extract.tdsx')
-HYPER_NAME = 'IPFabric.hyper'
+DEVICES_TDSX = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'IPFabric-Devices.tdsx')
+INTENT_TDSX = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'IPFabric-Intent.tdsx')
+DEVICES_FILE = 'Devices.hyper'
+INTENT_FILE = 'Intent.hyper'
 TABLEAU_LOG = 'hyperd.log'
 
 
-def swap_hyper(hyper_name):
+def swap_hyper(hyper_name, tdsx_name):
     """Uses tableau_tools to open a local .tdsx file and replace the hyperfile."""
     # Uses tableau_tools to replace the hyper file in the TDSX.
-    local_tds = TableauFileManager.open(filename=TDSX_NAME, logger_obj=Logger(TABLEAU_LOG))
+    local_tds = TableauFileManager.open(filename=tdsx_name, logger_obj=Logger(TABLEAU_LOG))
     filenames = local_tds.get_filenames_in_package()
     for filename in filenames:
         if filename.find('.hyper') != -1:
@@ -30,14 +32,14 @@ def swap_hyper(hyper_name):
             local_tds.set_file_for_replacement(filename_in_package=filename, replacement_filname_on_disk=hyper_name)
             break
 
-    tdsx_name_before_extension, tdsx_name_extension = os.path.splitext(TDSX_NAME)
+    tdsx_name_before_extension, tdsx_name_extension = os.path.splitext(tdsx_name)
     tdsx_updated_name = tdsx_name_before_extension + '_updated' + tdsx_name_extension
     local_tds.save_new_file(new_filename_no_extension=tdsx_updated_name)
-    os.remove(TDSX_NAME)
-    os.rename(tdsx_updated_name, TDSX_NAME)
+    os.remove(tdsx_name)
+    os.rename(tdsx_updated_name, tdsx_name)
 
 
-def publish_to_server():
+def publish_to_server(tdsx_name):
     """Publishes updated, local .tdsx to Tableau, overwriting the original file."""
 
     # Creates the auth object based on the config file.
@@ -62,8 +64,45 @@ def publish_to_server():
         # Publishes the data source.
         overwrite_true = TSC.Server.PublishMode.Overwrite
         datasource = TSC.DatasourceItem(project_id)
-        datasource = server.datasources.publish(datasource, TDSX_NAME, overwrite_true)
+        datasource = server.datasources.publish(datasource, tdsx_name, overwrite_true)
         logger.info(f"Publishing of datasource complete.")
+
+
+def intent_tables(snapshot_id):
+    color = {0: 'green', 10: 'blue', 20: 'amber', 30: 'red'}
+    intents = list()
+    intent_groups = list()
+    for intent in IPF.intent.get_intent_checks(snapshot_id):
+        intents.append(dict(
+            id=intent.intent_id,
+            rule=intent.name,
+            description=intent.descriptions.general,
+            custom=intent.custom,
+            default=color[intent.default_color] if intent.default_color else None,
+            green=intent.result.checks.green,
+            blue=intent.result.checks.blue,
+            amber=intent.result.checks.amber,
+            red=intent.result.checks.red,
+            green_desc=intent.descriptions.checks.green if intent.descriptions.checks else None,
+            blue_desc=intent.descriptions.checks.blue if intent.descriptions.checks else None,
+            amber_desc=intent.descriptions.checks.amber if intent.descriptions.checks else None,
+            red_desc=intent.descriptions.checks.red if intent.descriptions.checks else None
+        ))
+        for group in intent.groups:
+            intent_groups.append(dict(intent_id=intent.intent_id, group_id=group.group_id))
+
+    groups = list()
+    for group in IPF.intent.get_groups():
+        groups.append(dict(name=group.name, group_id=group.group_id))
+
+    return groups, intent_groups, intents
+
+
+def update_and_publish(dict_of_frames, hyper, tdsx):
+    pantab.frames_to_hyper(dict_of_frames, hyper)
+    swap_hyper(hyper, tdsx)
+    os.remove(hyper)
+    publish_to_server(tdsx)
 
 
 def process_event(event: Event):
@@ -73,7 +112,9 @@ def process_event(event: Event):
     IPF.update()
 
     # This will set IPF.snapshot_id = '$last' during running webhook tests, or it will fail.
-    IPF.snapshot_id = event.snapshot.snapshot_id if not event.test else '$last'
+    snapshot_id = event.snapshot.snapshot_id if not event.test else '$last'
+    IPF.snapshot_id = snapshot_id
+    groups, intent_groups, intents = intent_tables(snapshot_id)
 
     dict_of_frames = {
         TableName("ipfabric", "devices"): json_normalize(IPF.inventory.devices.all()),
@@ -81,8 +122,14 @@ def process_event(event: Event):
         TableName("ipfabric", "interfaces"): json_normalize(IPF.inventory.interfaces.all()),
         TableName("ipfabric", "eol"): json_normalize(IPF.fetch_all('tables/reports/eof/detail')),
     }
-    pantab.frames_to_hyper(dict_of_frames, HYPER_NAME)
-    swap_hyper(HYPER_NAME)
-    os.remove(HYPER_NAME)
-    publish_to_server()
+    update_and_publish(dict_of_frames, DEVICES_FILE, DEVICES_TDSX)
+
+    dict_of_frames = {
+        TableName("ipfabric", "groups"): json_normalize(groups),
+        TableName("ipfabric", "intent_groups"): json_normalize(intent_groups),
+        TableName("ipfabric", "intents"): json_normalize(intents),
+    }
+    pantab.frames_to_hyper(dict_of_frames, INTENT_FILE)
+    update_and_publish(dict_of_frames, INTENT_FILE, INTENT_TDSX)
+
     os.remove(TABLEAU_LOG)

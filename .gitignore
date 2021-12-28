@@ -136,5 +136,5 @@ dmypy.json
 poetry.lock
 
 # Tableau
-ipf_webhook_listener/IPFabric.hyper
-ipf_webhook_listener/automation/IPFabric-Extract.tdsx
+ipf_webhook_listener/*.hyper
+ipf_webhook_listener/automation/*.tdsx

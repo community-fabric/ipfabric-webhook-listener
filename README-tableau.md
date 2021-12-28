@@ -31,9 +31,10 @@ If you have any poetry install issues go to `AppData\Local\pypoetry` and delete 
 
 ### TDSX FILE
 **IMPORTANT READ AND FOLLOW THESE INSTRUCTIONS**
-- Copy `IPFabric-Extract.tdsx` to `ipf_webhook_listener/automation/IPFabric-Extract.tdsx`
-- This file is in the `.gitignore`
-- **Pushing changes of the `automation/IPFabric-Extract.tdsx` to a git repository will expose your environment's data**
+- Copy `IPFabric-Devices.tdsx` to `ipf_webhook_listener/automation/IPFabric-Devices.tdsx`
+- Copy `IPFabric-Intent.tdsx` to `ipf_webhook_listener/automation/IPFabric-Intent.tdsx`
+- These files are in the `.gitignore` and should not be pushed to repo
+- **Pushing changes of the `automation/*.tdsx` to a git repository will expose your environment's data**
 
 ### IP Fabric Setup
 
