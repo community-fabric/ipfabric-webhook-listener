@@ -105,16 +105,13 @@ def update_and_publish(dict_of_frames, hyper, tdsx):
     publish_to_server(tdsx)
 
 
-def process_event(event: Event):
-    if event.type != 'snapshot' or event.action != 'discover' or \
-            event.status != 'completed' or 'cron' not in event.requester:
-        return  # Only process scheduled discovery snapshots.
+def process_snapshot(event: Event):
+    snapshot_id = event.snapshot.snapshot_id if not event.test else '$last'
+    os.environ['CRON_SNAPSHOT_ID'] = snapshot_id
     IPF.update()
 
     # This will set IPF.snapshot_id = '$last' during running webhook tests, or it will fail.
-    snapshot_id = event.snapshot.snapshot_id if not event.test else '$last'
     IPF.snapshot_id = snapshot_id
-    groups, intent_groups, intents = intent_tables(snapshot_id)
 
     dict_of_frames = {
         TableName("ipfabric", "devices"): json_normalize(IPF.inventory.devices.all()),
@@ -124,6 +121,12 @@ def process_event(event: Event):
     }
     update_and_publish(dict_of_frames, DEVICES_FILE, DEVICES_TDSX)
 
+
+def process_intent(event: Event):
+    os.unsetenv('CRON_SNAPSHOT_ID')
+    snapshot_id = event.snapshot_id if not event.test else '$last'
+    groups, intent_groups, intents = intent_tables(snapshot_id)
+
     dict_of_frames = {
         TableName("ipfabric", "groups"): json_normalize(groups),
         TableName("ipfabric", "intent_groups"): json_normalize(intent_groups),
@@ -132,4 +135,16 @@ def process_event(event: Event):
     pantab.frames_to_hyper(dict_of_frames, INTENT_FILE)
     update_and_publish(dict_of_frames, INTENT_FILE, INTENT_TDSX)
 
-    os.remove(TABLEAU_LOG)
+
+def process_event(event: Event):
+    if event.type == 'snapshot' and event.action == 'discover' and \
+            event.status == 'completed' and event.requester == 'cron':
+        process_snapshot(event)
+    elif event.type == 'intent-verification' and event.status == 'completed' \
+            and event.requester == 'snapshot:discover' and event.snapshot_id == os.getenv('CRON_SNAPSHOT_ID'):
+        process_intent(event)
+
+    try:
+        os.remove(TABLEAU_LOG)
+    except FileNotFoundError:
+        pass
