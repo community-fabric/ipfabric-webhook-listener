@@ -75,14 +75,8 @@ def process_event(event: Event):
     # This will set IPF.snapshot_id = '$last' during running webhook tests, or it will fail.
     IPF.snapshot_id = event.snapshot.snapshot_id if not event.test else '$last'
 
-    sites = IPF.inventory.sites.all()
-    for site in sites:
-        site.pop('rDomains')
-        site.pop('stpDomains')
-
     dict_of_frames = {
         TableName("ipfabric", "devices"): json_normalize(IPF.inventory.devices.all()),
-        TableName("ipfabric", "sites"): json_normalize(sites),
         TableName("ipfabric", "pn"): json_normalize(IPF.inventory.pn.all()),
         TableName("ipfabric", "interfaces"): json_normalize(IPF.inventory.interfaces.all()),
         TableName("ipfabric", "eol"): json_normalize(IPF.fetch_all('tables/reports/eof/detail')),
