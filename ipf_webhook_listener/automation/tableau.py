@@ -6,8 +6,7 @@ import tableauserverclient as TSC
 from ipfabric import IPFClient
 from pandas import json_normalize
 from tableau_tools.tableau_documents import TableauFileManager
-from tableau_tools.logger import Logger
-from tableauhyperapi import TableName
+from tableauhyperapi import TableName, HyperProcess, Telemetry
 
 from ..config import settings
 from ..models import Event
@@ -24,7 +23,7 @@ TABLEAU_LOG = 'hyperd.log'
 def swap_hyper(hyper_name, tdsx_name):
     """Uses tableau_tools to open a local .tdsx file and replace the hyperfile."""
     # Uses tableau_tools to replace the hyper file in the TDSX.
-    local_tds = TableauFileManager.open(filename=tdsx_name, logger_obj=Logger(TABLEAU_LOG))
+    local_tds = TableauFileManager.open(filename=tdsx_name)
     filenames = local_tds.get_filenames_in_package()
     for filename in filenames:
         if filename.find('.hyper') != -1:
@@ -93,13 +92,14 @@ def intent_tables(snapshot_id):
 
     groups = list()
     for group in IPF.intent.get_groups():
-        groups.append(dict(name=group.name, group_id=group.group_id))
+        groups.append(dict(group_name=group.name, group_id=group.group_id))
 
     return groups, intent_groups, intents
 
 
 def update_and_publish(dict_of_frames, hyper, tdsx):
-    pantab.frames_to_hyper(dict_of_frames, hyper)
+    with HyperProcess(Telemetry.DO_NOT_SEND_USAGE_DATA_TO_TABLEAU, parameters={'log_config': ''}) as hyperprocess:
+        pantab.frames_to_hyper(dict_of_frames, hyper, hyper_process=hyperprocess)
     swap_hyper(hyper, tdsx)
     os.remove(hyper)
     publish_to_server(tdsx)
@@ -144,7 +144,7 @@ def process_event(event: Event):
             and event.requester == 'snapshot:discover' and event.snapshot_id == os.getenv('CRON_SNAPSHOT_ID'):
         process_intent(event)
 
-    try:
-        os.remove(TABLEAU_LOG)
-    except FileNotFoundError:
-        pass
+    # try:
+    #     os.remove(TABLEAU_LOG)
+    # except FileNotFoundError:
+    #     pass
