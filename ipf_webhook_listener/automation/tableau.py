@@ -132,7 +132,6 @@ def process_intent(event: Event):
         TableName("ipfabric", "intent_groups"): json_normalize(intent_groups),
         TableName("ipfabric", "intents"): json_normalize(intents),
     }
-    pantab.frames_to_hyper(dict_of_frames, INTENT_FILE)
     update_and_publish(dict_of_frames, INTENT_FILE, INTENT_TDSX)
 
 
