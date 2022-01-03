@@ -134,3 +134,7 @@ dmypy.json
 
 # Poetry.lock becuase this will cause issues merging branches.
 poetry.lock
+
+# Tableau
+ipf_webhook_listener/*.hyper
+ipf_webhook_listener/automation/*.tdsx
