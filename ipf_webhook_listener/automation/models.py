@@ -3,6 +3,8 @@ from sqlalchemy.orm import relationship, backref
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.declarative import declarative_base
 
+FK = "snapshot.snapshot_id"
+
 Base = declarative_base()
 
 
@@ -20,19 +22,16 @@ class Snapshot(Base):
 
 class Errors(Base):
     __tablename__ = "errors"
-    snapshot_id = Column(UUID(as_uuid=True), ForeignKey("snapshot.snapshot_id"))
-    parsing_failures = Column(Integer)
-    result_mapping_failures = Column(Integer)
-    command_auth_failures = Column(Integer)
-    invalid_command = Column(Integer)
-    device_issue = Column(Integer)
-    auth_error = Column(Integer)
+    error_id = Column(Integer, primary_key=True, autoincrement=True)
+    snapshot_id = Column(UUID(as_uuid=True), ForeignKey(FK))
+    error_type = Column(String)
+    error_count = Column(Integer)
 
 
 class Site(Base):
     __tablename__ = "sites"
     site_key = Column(Integer, primary_key=True)
-    snapshot_id = Column(UUID(as_uuid=True), ForeignKey("snapshot.snapshot_id"))
+    snapshot_id = Column(UUID(as_uuid=True), ForeignKey(FK))
     site_name = Column(String)
     site_id = Column(Integer)
     site_uid = Column(String)
@@ -47,9 +46,9 @@ class Site(Base):
 
 
 class Device(Base):
-    __tablename__ = "sites"
+    __tablename__ = "devices"
     device_id = Column(String, primary_key=True)
-    snapshot_id = Column(UUID(as_uuid=True), ForeignKey("snapshot.snapshot_id"))
+    snapshot_id = Column(UUID(as_uuid=True), ForeignKey(FK))
     site_key = Column(Integer, ForeignKey("sites.site_key"))
     device_type = Column(String)
     family = Column(String)

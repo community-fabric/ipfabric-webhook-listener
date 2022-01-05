@@ -7,11 +7,11 @@ class Settings(BaseSettings):
     ipf_token: str
     ipf_verify: bool = True
     ipf_test: bool = False
-    tableau_server: str
-    tableau_site: str
-    tableau_project: str = 'Default'
-    tableau_token_name: str
-    tableau_token: str
+    postgres_user: str
+    postgres_pass: str
+    postgres_host: str = 'localhost'
+    postgres_port: int = 5432
+    postgres_db: str = 'ipfabric'
 
     class Config:
         env_file = '.env'
