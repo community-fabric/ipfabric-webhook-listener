@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Table, DateTime, Float
+from sqlalchemy import Column, Integer, String, ForeignKey, Table, DateTime, Float, BigInteger
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.declarative import declarative_base
@@ -30,10 +30,10 @@ class Errors(Base):
 
 class Site(Base):
     __tablename__ = "sites"
-    site_key = Column(Integer, primary_key=True)
-    snapshot_id = Column(UUID(as_uuid=True), ForeignKey(FK))
+    site_id = Column(BigInteger, unique=True)
+    site_key = Column(BigInteger, primary_key=True)
+    snapshot_id = Column(UUID(as_uuid=True), ForeignKey(FK), primary_key=True)
     site_name = Column(String)
-    site_id = Column(Integer)
     site_uid = Column(String)
     devices = Column(Integer)
     networks = Column(Integer)
@@ -47,9 +47,9 @@ class Site(Base):
 
 class Device(Base):
     __tablename__ = "devices"
-    device_id = Column(String, primary_key=True)
+    device_id = Column(BigInteger, primary_key=True)
     snapshot_id = Column(UUID(as_uuid=True), ForeignKey(FK))
-    site_key = Column(Integer, ForeignKey("sites.site_key"))
+    site_key = Column(Integer)
     device_type = Column(String)
     family = Column(String)
     hostname = Column(String)
@@ -57,16 +57,17 @@ class Device(Base):
     login_ip = Column(String)
     login_type = Column(String)
     mac = Column(String)
-    total_memory = Column(Integer)
-    used_memory = Column(Integer)
+    total_memory = Column(BigInteger)
+    used_memory = Column(BigInteger)
     memory_utilization = Column(Float)
     model = Column(String)
     platform = Column(String)
     processor = Column(String)
     serial_number = Column(String)
     hw_serial_number = Column(String)
-    uptime = Column(Integer)
+    uptime = Column(BigInteger)
     vendor = Column(String)
     version = Column(String)
     reload = Column(String)
     config_reg = Column(String)
+    __table_args__ = (ForeignKeyConstraint((site_key, snapshot_id), [Site.site_key, Site.snapshot_id]), {})

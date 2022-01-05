@@ -5,7 +5,7 @@ from ipfabric import IPFClient
 
 from ..config import settings
 from ..models import Event
-from automation.models import Snapshot, Device, Errors, Site
+from automation.models import Snapshot, Device, Errors, Site, Base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -40,10 +40,10 @@ def add_errors(session, snapshot):
 def add_site(session, sites, snapshot_id):
     for site in sites:
         s = Site(
-            site_key=site.get('siteKey'),
+            site_key=int(site.get('siteKey')),
             snapshot_id=snapshot_id,
             site_name=site.get('siteName'),
-            site_id=site.get('id'),
+            site_id=int(site.get('id')),
             site_uid=site.get('siteUid'),
             devices=site.get('devicesCount'),
             networks=site.get('networksCount'),
@@ -60,9 +60,9 @@ def add_site(session, sites, snapshot_id):
 def add_device(session, devices, snapshot_id):
     for dev in devices:
         device = Device(
-            device_id=dev.get('id'),
+            device_id=int(dev.get('id')),
             snapshot_id=snapshot_id,
-            site_key=dev.get('siteKey'),
+            site_key=int(dev.get('siteKey')),
             device_type=dev.get('devType'),
             family=dev.get('family'),
             hostname=dev.get('hostname'),
@@ -97,7 +97,7 @@ def process_snapshot(event: Event):
     engine = create_engine('postgresql://' + settings.postgres_user + ':' + settings.postgres_pass + '@' +
                            settings.postgres_host + ':' + str(settings.postgres_port) + '/' + settings.postgres_db)
 
-    # Base.metadata.create_all(bind=engine)
+    Base.metadata.create_all(bind=engine)
     Session = sessionmaker()
     Session.configure(bind=engine)
     with Session() as session:
@@ -107,7 +107,9 @@ def process_snapshot(event: Event):
     with Session() as session:
         add_errors(session, IPF.snapshots[snapshot_id])
         add_site(session, IPF.inventory.sites.all(), snapshot_id)
+        session.flush()
         add_device(session, IPF.inventory.devices.all(), snapshot_id)
+        session.commit()
 
 
 def process_intent(event: Event):
