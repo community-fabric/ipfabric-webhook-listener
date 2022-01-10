@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 from datetime import datetime
@@ -130,14 +131,15 @@ def add_eol(session, eols, snapshot_id):
 
 
 def intent_url(intent):
+    options = '?options={"f":{"'
     check_url = dict(
-        green='?options={"f":{"' + str(intent.column) + '":["color","eq","0"]}}' if intent.checks.green else None,
-        blue='?options={"f":{"' + str(intent.column) + '":["color","eq","10"]}}' if intent.checks.green else None,
-        amber='?options={"f":{"' + str(intent.column) + '":["color","eq","20"]}}' if intent.checks.green else None,
-        red='?options={"f":{"' + str(intent.column) + '":["color","eq","30"]}}' if intent.checks.green else None,
+        green=options + str(intent.column) + '":["color","eq","0"]}}' if intent.checks.green else None,
+        blue=options + str(intent.column) + '":["color","eq","10"]}}' if intent.checks.green else None,
+        amber=options + str(intent.column) + '":["color","eq","20"]}}' if intent.checks.green else None,
+        red=options + str(intent.column) + '":["color","eq","30"]}}' if intent.checks.green else None,
     )
     if intent.default_color and check_url[COLORDICT[intent.default_color]] is None:
-        check_url[COLORDICT[intent.default_color]] = '?options={"f":{"' + str(intent.column) + \
+        check_url[COLORDICT[intent.default_color]] = options + str(intent.column) + \
                                                      '":["color","eq","' + str(intent.default_color) + '"]}}'
     return check_url
 
