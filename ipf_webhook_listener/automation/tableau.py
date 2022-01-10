@@ -96,7 +96,7 @@ def add_device(session, devices, snapshot_id):
 def add_parts(session, parts, snapshot_id):
     for p in parts:
         part = Part(
-            part_id=p.get('id'),
+            part_id=int(p.get('id')),
             snapshot_id=snapshot_id,
             serial_number=p.get('sn'),
             device_serial_number=p.get('deviceSn'),
@@ -115,7 +115,7 @@ def add_parts(session, parts, snapshot_id):
 def add_eol(session, eols, snapshot_id):
     for e in eols:
         eol = EoL(
-            eol_id=e.get('id'),
+            eol_id=int(e.get('id')),
             snapshot_id=snapshot_id,
             part_number=e.get('pid'),
             replacement=e.get('replacement'),

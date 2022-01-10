@@ -95,7 +95,7 @@ class Part(Base):
 class EoL(Base):
     __tablename__ = "eol"
     eol_id = Column(BigInteger, primary_key=True)
-    snapshot_id = Column(UUID(as_uuid=True), ForeignKey(FK))
+    snapshot_id = Column(UUID(as_uuid=True), ForeignKey(FK), primary_key=True)
     part_number = Column(String)
     vendor = Column(String)
     replacement = Column(String)
