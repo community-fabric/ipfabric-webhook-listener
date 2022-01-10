@@ -17,5 +17,10 @@ class Settings(BaseSettings):
         env_file = '.env'
         env_file_encoding = 'utf-8'
 
+    @property
+    def postgres_con(self):
+        return 'postgresql://' + self.postgres_user + ':' + self.postgres_pass + '@' + \
+               self.postgres_host + ':' + str(self.postgres_port) + '/' + self.postgres_db
+
 
 settings = Settings()

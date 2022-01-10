@@ -3,10 +3,15 @@ import hmac
 import uvicorn
 from fastapi import FastAPI, Header, HTTPException, Request, status, BackgroundTasks
 from fastapi.responses import RedirectResponse, Response
+from sqlalchemy import create_engine
 
+from .automation.models import Base
 from .automation.tableau import process_event
 from .config import settings
 from .models import Event
+
+engine = create_engine(settings.postgres_con)
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
