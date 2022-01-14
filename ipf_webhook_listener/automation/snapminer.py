@@ -1,6 +1,10 @@
 #!/usr/bin/python3
+import logging
+
 import httpx
 from ipfabric import IPFClient
+
+logger = logging.getLogger()
 
 
 class MineSnapshot(IPFClient):
@@ -21,8 +25,7 @@ class MineSnapshot(IPFClient):
             post_request.raise_for_status()
             return post_request.json()['_meta']['count'] if count else post_request.json()
         except httpx.HTTPError:
-            print('  API POST Error - Unable to POST data from endpoint: ', endpoint)
-            print('  --Error: ', post_request.text)
+            logger.warning(f'API POST Error - Unable to POST data from endpoint: {endpoint}')
             return None
 
     def mine_base_data(self):
@@ -33,7 +36,6 @@ class MineSnapshot(IPFClient):
             'e_wclients': '/tables/wireless/clients',
             'e_rules': '/reports?snapshot=' + self.snapshot_id,
         """
-        print('  Getting base data from url: ', self.base_url)
         l_active_int, l_edge_int = self.universal_load, self.universal_load
         l_active_int.update({"columns": ['l2'], "filters": {"l2": ["like", "up"]}})
         l_edge_int.update({"columns": ['edge'], "filters": {"edge": ["eq", "true"]}})
