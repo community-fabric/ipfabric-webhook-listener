@@ -1,3 +1,4 @@
+import logging
 import os
 import smtplib
 import ssl
@@ -10,6 +11,8 @@ from .pdfmaker import GeneratePDF
 from .snapminer import MineSnapshot
 from ..config import settings
 from ..models import Event
+
+logger = logging.getLogger()
 
 
 def send_email(subject, pdf_data, file_name):
@@ -31,14 +34,16 @@ def send_email(subject, pdf_data, file_name):
         server.sendmail(settings.mail_from, settings.mail_to, mimemsg.as_string())
 
 
-def process_intent():
+def process_intent(timestamp):
     snapshot_id = os.getenv('CRON_SNAPSHOT_ID')
+    logger.info("Getting IP Fabric Data")
     base_dataset = MineSnapshot(base_url=settings.ipf_url, token=settings.ipf_token, verify=settings.ipf_verify,
                                 snapshot_id=snapshot_id)
+    logger.info("Generating IP Fabric PDF Report")
     pdf_object = GeneratePDF()
-
     pdf_data = pdf_object.analysis_report(base_dataset)
-    send_email('Test', pdf_data, 'Test.pdf')
+    logger.info("Emailing IP Fabric PDF Report")
+    send_email(f"IP Fabric Report - {timestamp.ctime()}", pdf_data, f"IPFabric-{timestamp.strftime('%m%d%Y-%H%M')}.pdf")
 
 
 def process_event(event: Event):
@@ -49,5 +54,5 @@ def process_event(event: Event):
     elif event.type == 'intent-verification' and event.status == 'completed' \
             and ((event.requester == 'snapshot:discover' and event.snapshot_id == os.getenv('CRON_SNAPSHOT_ID')) or
                  event.test):
-        process_intent()
+        process_intent(event.timestamp)
         os.unsetenv('CRON_SNAPSHOT_ID')
