@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+import base64
 from time import strftime
 
 from fpdf import FPDF, HTMLMixin
@@ -52,7 +53,7 @@ class GeneratePDF:
         self.table_line_height = pdf.font_size * 1.4
         return pdf
 
-    def analysis_report(self, base_dataset, output_file_path):
+    def analysis_report(self, base_dataset):
         """Supply PDF object with data and output into a report file."""
         pdf = self.create_pdf()
         intent_rules = base_dataset.mine_intent_rules()
@@ -270,14 +271,5 @@ class GeneratePDF:
         add_title('2. Defined Intent-Based Rules', 'title1')
         add_intent_rules(intent_rules, intent_links)
 
-        try:
-            print('  -- Creating PDF: ', output_file_path)
-            pdf.output(output_file_path)
-        except PermissionError as err:
-            print('  -- Unable to create PDF due to: {}'.format(err))
-        except FileNotFoundError as err:
-            print('  -- Directory not found: {}'.format(err))
-        except:
-            print('Unable to create PDF file: {}, Unexpected error.'.format(
-                output_file_path))
-            raise
+        encodedStr = base64.b64encode(pdf.output(dest='S').encode("latin-1")).decode("latin-1")
+        return pdf.output(dest='S').encode("latin-1")
