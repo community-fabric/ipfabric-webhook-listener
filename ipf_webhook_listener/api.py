@@ -6,7 +6,7 @@ from fastapi.responses import RedirectResponse, Response
 from sqlalchemy import create_engine
 
 from .automation.models import Base
-from .automation.tableau import process_event
+from .automation.postgres import process_event
 from .config import settings
 from .models import Event
 
