@@ -1,9 +1,6 @@
 # IP Fabric Webhook Integration for Microsoft Teams and/or Slack
 
-Integrations will be developed under different branches based on the main branch. 
-This will allow for easier development and not require installing all packages for integrations 
-you do not plan to use.  We will develop an integration video on how to merge different branches into 
-a usable product per your environment.
+This will send an alert to MS Teams or Slack when certain Snapshot or Intent Rules are process in IP Fabric.
 
 ## Setup
 
@@ -39,6 +36,11 @@ If you have any poetry install issues go to `AppData\Local\pypoetry` and delete 
     - `IPF_TOKEN` is an API token created in Settings > API Token
         - If you want to translate User ID to Username token must have User Management Scope
     - `IPF_TEST` will not send test alerts to the channel when set to `False`
+    - `IPF_ALERTS` will turn on/off which events to respond to:
+      - Default IP Fabric alerts can be found in [ipf_alerts.json](ipf_alerts.json) and then minified into `IPF_ALERTS`
+      - Edit [ipf_alerts.json](ipf_alerts.json) to your desired settings
+      - `python -c "import json, sys;json.dump(json.load(sys.stdin), sys.stdout)"  < ipf_alerts.json`
+      - Copy/paste output in `IPF_ALERTS`
     - Notification Channels (Can send to both locations if both variables are set)
       - `TEAMS_URL` is found when adding an "Incoming Webhook" on a Teams Channel
       - `SLACK_URL` is found when adding an "Incoming Webhook" on a Slack Channel
