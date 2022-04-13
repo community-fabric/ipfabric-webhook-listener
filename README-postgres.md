@@ -40,7 +40,7 @@ If you have any poetry install issues go to `AppData\Local\pypoetry` and delete 
     - `IPF_TEST` will not process a webhook when using the test function `False`
       - Test webhook requests will fail because it uses a random snapshot ID so automation will fail.
       - If test is set to true, automation will use $last snapshot ID.
-    - Tableau Information
+    - Postgres Information
       - `POSTGRES_USER` Postgres User
       - `POSTGRES_PASS` Postgres Password
       - `POSTGRES_HOST` Posgtres host (defaults to localhost)
