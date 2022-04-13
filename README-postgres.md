@@ -56,7 +56,6 @@ poetry run api
 ```
 
 ### Docker
-Docker may not work as this requires writing a file to storage.
 
 ```shell
 docker-compose up
