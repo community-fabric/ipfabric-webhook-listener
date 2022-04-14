@@ -7,12 +7,6 @@ class Settings(BaseSettings):
     ipf_token: str
     ipf_verify: bool = True
     ipf_test: bool = False
-    email_user: str
-    email_pass: str
-    mail_from: str
-    mail_to: str
-    smtp_server: str
-    smtp_port: int
 
     class Config:
         env_file = '.env'
