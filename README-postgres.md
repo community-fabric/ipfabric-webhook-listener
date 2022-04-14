@@ -60,3 +60,8 @@ poetry run api
 ```shell
 docker-compose up
 ```
+
+## Grafana
+Please see the JSON models located in [Grafana](Grafana) for examples on creating a dashboard.
+You will need to connect Grafana to your PostgreSQL DB and find the `UID` of it.
+After you have that identifier replace all instances of `<REPLACE WITH UID OF YOUR CONNECTED POSTGRES DB>` in the JSON files and import it.
