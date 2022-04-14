@@ -13,6 +13,7 @@ RUN python3 -m pip install pip \
 
 COPY pyproject.toml pyproject.toml
 COPY ipf_webhook_listener ipf_webhook_listener
+COPY ipf_webhook_listener/images images
 RUN chown -R ipf .
 RUN poetry install --no-dev -E postgres
 
