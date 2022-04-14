@@ -2,6 +2,10 @@
 
 FROM python:3.8-slim-buster
 
+RUN apt-get update \
+    && apt-get -y install libpq-dev gcc
+
+
 RUN useradd -ms /bin/bash ipf
 
 WORKDIR /opt/ipf
