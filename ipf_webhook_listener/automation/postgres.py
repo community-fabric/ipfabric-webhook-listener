@@ -256,11 +256,10 @@ def process_intent(event: Event):
 
 
 def process_event(event: Event):
-    if event.type == 'snapshot' and event.action == 'discover' and \
-            event.status == 'completed' and event.requester == 'cron' and not event.test:
+    if event.type == 'snapshot' and \
+            (event.test or (event.action == 'discover' and event.status == 'completed' and event.requester == 'cron')):
         process_snapshot(event)
-    elif event.type == 'intent-verification' and event.status == 'completed' and not event.test \
-            and event.requester == 'snapshot:discover' and event.snapshot_id == os.getenv('CRON_SNAPSHOT_ID'):
+    elif event.type == 'intent-verification' and \
+            (event.test or (event.status == 'completed' and event.requester == 'snapshot:discover' and
+                            event.snapshot_id == os.getenv('CRON_SNAPSHOT_ID'))):
         process_intent(event)
-    elif event.test:
-        logger.warning(f"Process {event.type} test.")
