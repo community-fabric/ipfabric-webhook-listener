@@ -1,10 +1,10 @@
 import hmac
+from time import sleep
 
 import uvicorn
 from fastapi import FastAPI, Header, HTTPException, Request, status, BackgroundTasks
 from fastapi.responses import RedirectResponse, Response
 
-from .automation.emailpdf import process_event
 from .config import settings
 from .models import Event
 
@@ -32,7 +32,7 @@ async def webhook(event: Event, request: Request, bg_tasks: BackgroundTasks, x_i
         raise HTTPException(status_code=400, detail="X-IPF-Signature does not match.")
     if not event.test or (settings.ipf_test and event.test):
         print(event.__dict__)
-        bg_tasks.add_task(process_event, event)
+        bg_tasks.add_task(sleep, 10)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
