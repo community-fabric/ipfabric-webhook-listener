@@ -10,7 +10,6 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.7.1"
-fastapi-manage = "^0.8.0"
 python-dotenv = "^0.19.2"
 uvicorn = "^0.16.0"
 ipfabric = "^0.9.0"
@@ -24,6 +23,7 @@ tableauserverclient = {version = "^0.17.0", optional = true}
 SQLAlchemy = {version = "^1.4.29", optional = true}
 psycopg2 = {version = "^2.9.3", optional = true}
 fpdf = {version = "^1.7.2", optional = true}
+fastapi = "^0.75.1"
 
 [tool.poetry.dev-dependencies]
 
