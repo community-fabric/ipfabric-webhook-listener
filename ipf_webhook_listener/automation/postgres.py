@@ -9,7 +9,7 @@ from pytz import UTC
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from automation.models import Snapshot, Device, Errors, Site, Intent, Group, IntentMapping, IntentResult, Part, \
+from .models import Snapshot, Device, Errors, Site, Intent, Group, IntentMapping, IntentResult, Part, \
     EoL
 from ..config import settings
 from ..models import Event
